@@ -10,4 +10,20 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./../minilibx/minilibx_macos/mlx.h"
+#ifndef FDF_H
+# define FDF_H
+
+# include "./../minilibx_macos/mlx.h"
+# include "./../libft/libft.h"
+# include <fcntl.h>
+# include <math.h>
+# include <stdio.h>
+# include <unistd.h>
+
+typedef struct	s_win
+{
+	void	*mlx_ptr;
+	void	*win_ptr;
+}				t_win;
+
+#endif

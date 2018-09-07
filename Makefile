@@ -16,12 +16,12 @@ CC = gcc
 
 #Using the -g for future debugging (REMOVE LATER)
 
-FLAGS = -Wall -Werror -Wextra #-g
+FLAGS = -Wall -Werror -Wextra -g
 
 SRC_PATH = ./sources/
 INC_PATH = ./includes/
 OBJ_PATH = ./obj/
-MLX_PATH = ./minilibx/minilibx_macos/
+MLX_PATH = ./minilibx_macos/
 LFT_PATH = ./libft/
 
 SRC_NAME = main.c
