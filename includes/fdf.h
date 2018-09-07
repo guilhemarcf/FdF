@@ -24,6 +24,11 @@ typedef struct	s_win
 {
 	void	*mlx_ptr;
 	void	*win_ptr;
+	char	turn;
+	int		x1;
+	int		x2;
+	int		y1;
+	int		y2;
 }				t_win;
 
 #endif
