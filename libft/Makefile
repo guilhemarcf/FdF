@@ -89,6 +89,7 @@ SRC = ft_atoi.c\
 		ft_mtx_print.c\
 		ft_print_tab.c\
 		get_next_line.c\
+		ft_lstnew2.c
 
 .PHONY: all clean fclean re
 

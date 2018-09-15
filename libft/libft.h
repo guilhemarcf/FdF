@@ -118,5 +118,6 @@ void			ft_mtx_iter(t_mtx_lst *mlst, void (*f)(t_mtx_lst *elem));
 void			ft_mtx_print(t_mtx_lst *mlst);
 void			ft_print_tab(char **s);
 int				get_next_line(const int fd, char **line);
+t_list			*ft_lstnew2(char *s);
 
 #endif

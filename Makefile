@@ -24,7 +24,8 @@ OBJ_PATH = ./obj/
 MLX_PATH = ./minilibx_macos/
 LFT_PATH = ./libft/
 
-SRC_NAME = main.c
+SRC_NAME = main.c\
+			read_map.c
 
 INC_NAME = fdf.h
 
@@ -56,5 +57,9 @@ fclean: clean
 	@rm -f $(NAME)
 
 re: fclean all
+
+simple: $(OBJ)
+	@$(CC) -o $(NAME) $(OBJ) -L $(LFT_PATH) -lft -L $(MLX_PATH) -lmlx \
+	-framework OpenGL -framework AppKit
 
 .PHONY: clean $(NAME) fclean all re
