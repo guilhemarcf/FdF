@@ -14,8 +14,6 @@ NAME = fdf
 
 CC = gcc
 
-#Using the -g for future debugging (REMOVE LATER)
-
 FLAGS = -Wall -Werror -Wextra -g
 
 SRC_PATH = ./sources/
@@ -28,7 +26,9 @@ SRC_NAME = main.c\
 			read_map.c\
 			prints.c\
 			checks.c\
-			keys.c
+			keys.c\
+			ext_keys.c\
+			matrix.c
 
 INC_NAME = fdf.h
 
