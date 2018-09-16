@@ -13,100 +13,35 @@
 #include "./../includes/fdf.h"
 
 
-/*
-void		prt_dbl_arr(double *nbrs, int qnbr)
-{
-	int i;
 
-	i = 0;
-	while (i < qnbr)
-	{
-		printf(" %lf ", nbrs[i]);
-		i++;
-	}
-	printf("\n");
-}
-*/
-/*
-int		ft_atoi_arr(char *str, int *i)
-{
-	int negative;
-	int result;
-
-	result = 0;
-	negative = 1;
-	while (str[*i] == ' ' || str[*i] == '\t' || str[*i] == '\n' ||
-		str[*i] == '\v' || str[*i] == '\f' || str[*i] == '\r')
-		(*i)++;
-	if (str[*i] == '+')
-		(*i)++;
-	else if (str[*i] == '-')
-	{
-		negative = -1;
-		(*i)++;
-	}
-	while (str[*i] >= '0' && str[*i] <= '9')
-	{
-		result = (result * 10) + (str[*i] - '0');
-		(*i)++;
-	}
-	return (result * negative);
-}
-*/
-
-
-
-/*
-int		*get_nbrs(char *s, int qnbr)
-{
-	int		*i;
-	int		j;
-	double	*nbrs;
-
-	if ((nbrs = (double *)malloc(sizeof(*nbrs) * (qnbr + 1))) == NULL)
-		return (NULL);
-	if ((i = (int *)malloc(sizeof(*i))) == NULL)
-		return (NULL);
-	*i = 0;
-	j = 0;
-	while (j < qnbr && s[*i] != 0)
-	{
-		nbrs[j] = ft_atod_arr(s, i);
-		(*i)++;
-		j++;
-	}
-	return (nbrs);
-}
-*/
-
-int			***int_mtx_3d(char ***chr_mtx, int line_count, int nbr_count)
+t_point		***pts_mtx_3d(char ***chr_mtx, int line_count,
+													int nbr_count, int a)
 {
 	int		i;
 	int		j;
-	int		***int_mtx;
+	t_point	***pts_mtx;
 
 	i = -1;
-	if ((int_mtx = (int ***)malloc(sizeof(*int_mtx) *
+	if ((pts_mtx = (t_point ***)malloc(sizeof(*pts_mtx) *
 								line_count)) == NULL)
 		return (NULL);
 	while (++i < line_count)
 	{
-		if ((int_mtx[i] = (int **)malloc(sizeof(**int_mtx) *
+		if ((pts_mtx[i] = (t_point **)malloc(sizeof(**pts_mtx) *
 										nbr_count)) == NULL)
 			return (NULL);
 		j = -1;
 		while (++j < nbr_count)
 		{
-			if ((int_mtx[i][j] = (int *)malloc(sizeof(***int_mtx))) == NULL)
+			if ((pts_mtx[i][j] = (t_point *)malloc(sizeof(***pts_mtx))) == NULL)
 				return (NULL);
-			*int_mtx[i][j] = ft_atoi(chr_mtx[i][j]);
+			(pts_mtx[i][j])->z = ft_atoi(chr_mtx[i][j]) * a;
+			(pts_mtx[i][j])->y = i * a;
+			(pts_mtx[i][j])->x = j * a;
 		}
 	}
-	return (int_mtx);
+	return (pts_mtx);
 }
-
-
-
 
 t_list		*read_map_to_lst(int fd)
 {
@@ -143,29 +78,6 @@ char		***chr_mtx_3d(t_list *lst, int lst_count)
 	mtx[i] = NULL;
 	return (mtx);
 }
-
-
-
-
-
-
-
-
-
-
-//t_win		*win;
-//if ((win = (t_win *)malloc(sizeof(t_win))) == NULL)
-		//return (0);
-
-
-
-
-
-
-
-
-
-
 
 
 

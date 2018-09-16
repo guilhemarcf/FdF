@@ -24,15 +24,17 @@
 
 typedef struct	s_point
 {
-	double	x;
-	double	y;
-	double	z;
+	int	x;
+	int	y;
+	int	z;
 }				t_point;
 
+/*
 typedef struct	s_map
 {
-	t_point	**xy_plane;
+	t_point	***xy_plane;
 }				t_map;
+*/
 
 typedef struct	s_win
 {
@@ -40,15 +42,30 @@ typedef struct	s_win
 	void		*w_p;
 	struct s_w	*next;
 	struct s_w	*prev;
-	t_map		*map;
+	int			lines;
+	int			columns;
+	int			keycode;
+	int			a;
+	t_point		***xyz_plane;
 }				t_win;
 
-int				ft_atoi_arr(char *str, int *i);
-//void			prt_dbl_arr(double *nbrs, int qnbr);
-int				*get_nbrs(char *s, int qnbr);
 t_list			*read_map_to_lst(int fd);
 char			***chr_mtx_3d(t_list *lst, int lst_count);
-int				***int_mtx_3d(char ***chr_mtx, int line_count, int nbr_count);
+t_point			***pts_mtx_3d(char ***chr_mtx, int line_count,
+													int nbr_count, int a);
 int				lines_are_uniform(char ***mtx);
+void			print_3da_chr(char ***s);
+void			print_3da_pts(t_point ***s, int line, int nbr);
+void			print_list(t_list *elem);
+int				count_nbrs(char ***mtx);
+int				count_lst(t_list *lst);
+int				acquire_xyz(t_win **win, char *arg);
+void			error(void);
+t_win			*init_window(char *arg);
+void			act_on_key(t_win *win);
+int				key_hook(int keycode, t_win *param);
+void			print_commands(t_win *win);
+void			plot_line(t_win *win, t_point *p0, t_point *p1);
+void			plot_points(t_win *win);
 
 #endif

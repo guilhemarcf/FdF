@@ -16,154 +16,72 @@
 ** I don't need this function before I actually want to print anything
 */
 
-/*
-int		init_window(t_win *win)
+
+t_win	*init_window(char *arg)
 {
-	void	*m_ptr;
-	void	*w_ptr;
+	t_win	*win;
 
-	win = NULL;
-	m_ptr = mlx_init();
-	w_ptr = mlx_new_window(m_ptr, W_WIDTH, W_HEIGHT, "fdf 42 - gcaixeta");
-	
-	win->w_ptr = w_ptr;
-	win->m_ptr = m_ptr;
-	return (0);
+	if ((win = (t_win *)malloc(sizeof(t_win))) == NULL)
+		return (NULL);
+	win->m_p = mlx_init();
+	win->w_p = mlx_new_window(win->m_p, W_WIDTH, W_HEIGHT,
+										"fdf 42 - gcaixeta");
+	win->a = 50;
+	if (acquire_xyz(&win, arg) != 1)
+		return (NULL);
+	win->next = NULL;
+	win->prev = NULL;
+	mlx_key_hook(win->w_p, key_hook, win);
+	mlx_loop(win->m_p);
+	return (win);
 }
-*/
-
 
 /*
 ** Main sets up the environment needed to make sure there's a goot plot
 */
 
-void	print_3da_chr(char ***s)
+void	error(void)
 {
-	int i;
-	int j;
-
-	i = 0;
-	while (s[i])
-	{
-		j = 0;
-		while (s[i][j])
-		{
-			ft_putstr(s[i][j]);
-			ft_putchar(' ');
-			j++;
-		}
-		ft_putchar('\n');
-		i++;
-	}
+	printf("this map can't be rendered since the lines aren't consistent\n");
+	//exit(0);
 }
 
-void	print_3da_int(int ***s, int line, int nbr)
+int		acquire_xyz(t_win **win, char *arg)
 {
-	int i;
-	int j;
+	t_list	*lst_store;
+	char	***chr_mtx;
+	int		fd;
 
-	i = 0;
-	while (i < line)
+	if ((fd = open(arg, O_RDONLY)) > 0 &&
+			(lst_store = read_map_to_lst(fd)) != NULL)
 	{
-		j = 0;
-		while (j < nbr)
+		(*win)->lines = count_lst(lst_store);
+		chr_mtx = chr_mtx_3d(lst_store, (*win)->lines);
+		if (lines_are_uniform(chr_mtx) != 1)
 		{
-			ft_putnbr(*s[i][j]);
-			ft_putchar(' ');
-			j++;
-		}
-		ft_putchar('\n');
-		i++;
-	}
-}
-
-int		lines_are_uniform(char ***mtx)
-{
-	int i;
-	int j;
-	int cmp;
-
-	i = 0;
-	while (mtx[i])
-	{
-		j = 0;
-		while (mtx[i][j])
-			j++;
-		if (i == 0)
-			cmp = j;
-		else if (cmp != j)
+			error();
 			return (0);
+		}
+		(*win)->columns = count_nbrs(chr_mtx);
+		(*win)->xyz_plane = pts_mtx_3d(chr_mtx, (*win)->lines,
+										(*win)->columns, (*win)->a);
+		return (1);
 	}
-	return (1);
-}
-
-int		count_nbrs(char ***mtx)
-{
-	int i;
-
-	i = 0;
-	while (mtx[0][i])
-		i++;
-	return (i);
-}
-
-int		count_lst(t_list *lst)
-{
-	int		i;
-
-	i = 0;
-	while (lst->next)
-	{
-		i++;
-		lst = lst->next;
-	}
-	return (i);
-}
-
-void	print_list(t_list *elem)
-{
-	char *s;
-
-	s = elem->content;
-	ft_putendl(s);
+	else
+		return (0);
 }
 
 int		main(int ac, char **av)
 {
 	int		i;
-	int		fd;
-	t_list	*lst_store;
-	char	***chr_mtx;
-	int		line_count;
-	int		***int_mtx;
-	int		nbr_count;
-
+	t_win	*win;
+	
 	i = 0;
 	while (++i < ac)
 	{
-		if ((fd = open(av[i], O_RDONLY)) > 0 &&
-				(lst_store = read_map_to_lst(fd)) != NULL)
+		if ((win = init_window(av[i])) == NULL)
 		{
-			line_count = count_lst(lst_store);
-			ft_lstiter(lst_store, &print_list);
-			printf("there are %d lines\n", line_count);
-			ft_putendl("and that's all!!!!!!");
-			chr_mtx = chr_mtx_3d(lst_store, line_count);
-			print_3da_chr(chr_mtx);
-			if (lines_are_uniform(chr_mtx))
-				printf("the lines are uniform\n");
-			else
-			{
-				printf("can't be rendered\n");
-				return (0);
-			}
-			nbr_count = count_nbrs(chr_mtx);
-			int_mtx = int_mtx_3d(chr_mtx, line_count, nbr_count);
-			print_3da_int(int_mtx, line_count, nbr_count);
-		}
-		else
-		{
-			ft_putendl("yep, didn't work");
+			printf("argument number %d couldn't be rendered\n", i);
 		}
 	}
 	return (0);

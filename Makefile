@@ -25,7 +25,10 @@ MLX_PATH = ./minilibx_macos/
 LFT_PATH = ./libft/
 
 SRC_NAME = main.c\
-			read_map.c
+			read_map.c\
+			prints.c\
+			checks.c\
+			keys.c
 
 INC_NAME = fdf.h
 
