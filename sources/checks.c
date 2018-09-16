@@ -48,7 +48,7 @@ int		count_lst(t_list *lst)
 	int		i;
 
 	i = 0;
-	while (lst->next)
+	while (lst)
 	{
 		i++;
 		lst = lst->next;

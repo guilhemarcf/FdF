@@ -12,11 +12,6 @@
 
 #include "./../includes/fdf.h"
 
-/*
-** I don't need this function before I actually want to print anything
-*/
-
-
 t_win	*init_window(char *arg)
 {
 	t_win	*win;
@@ -27,13 +22,18 @@ t_win	*init_window(char *arg)
 	win->m_p = mlx_init();
 	win->w_p = mlx_new_window(win->m_p, W_WIDTH, W_HEIGHT,
 										"fdf 42 - gcaixeta");
-	if (acquire_xyz(&win, arg) != 1)
-		return (NULL);
 	win->next = NULL;
 	win->prev = NULL;
-	win->a = 50;
-	win->osx = 250;
-	win->osy = 450;
+	win->ax = 20;
+	win->ay = 20;
+	win->az = 10;
+	win->osx = W_WIDTH / 2;
+	win->osy = W_HEIGHT / 2;
+	win->rotx = 3 * ANG_INCR;
+	win->roty = ANG_INCR;
+	win->rotz = -ANG_INCR;
+	if (acquire_xyz(&win, arg) != 1)
+		return (NULL);
 	print_commands(win);
 	plot_points(win);
 	mlx_key_hook(win->w_p, key_hook, win);
@@ -41,39 +41,96 @@ t_win	*init_window(char *arg)
 	return (win);
 }
 
-/*
-** Main sets up the environment needed to make sure there's a goot plot
-*/
-
-void	error(void)
+void	rot_x(t_win *win)
 {
-	printf("this map can't be rendered since the lines aren't consistent\n");
-	//exit(0);
+	int		i;
+	int		j;
+	double	y;
+	double	z;
+	t_point ***mtx;
+
+	mtx = win->xyz_plane;
+	i = -1;
+	while (++i < win->lines)
+	{
+		j = -1;
+		while (++j < win->columns)
+		{
+			y = (mtx[i][j])->var_y;
+			z = (mtx[i][j])->var_z;
+			(mtx[i][j])->var_y = y * cos(win->rotx) - z * sin(win->rotx);
+			(mtx[i][j])->var_z = y * sin(win->rotx) + z * cos(win->rotx);
+		}
+	}
 }
 
-int		acquire_xyz(t_win **win, char *arg)
+void	rot_y(t_win *win)
 {
-	t_list	*lst_store;
-	char	***chr_mtx;
-	int		fd;
+	int		i;
+	int		j;
+	double	x;
+	double	z;
+	t_point ***mtx;
 
-	if ((fd = open(arg, O_RDONLY)) > 0 &&
-			(lst_store = read_map_to_lst(fd)) != NULL)
+	mtx = win->xyz_plane;
+	i = -1;
+	while (++i < win->lines)
 	{
-		(*win)->lines = count_lst(lst_store);
-		chr_mtx = chr_mtx_3d(lst_store, (*win)->lines);
-		if (lines_are_uniform(chr_mtx) != 1)
+		j = -1;
+		while (++j < win->columns)
 		{
-			error();
-			return (0);
+			x = (mtx[i][j])->var_x;
+			z = (mtx[i][j])->var_z;
+			(mtx[i][j])->var_x = x * cos(win->roty) + z * sin(win->roty);
+			(mtx[i][j])->var_z = z * cos(win->roty) - x * sin(win->roty);
 		}
-		(*win)->columns = count_nbrs(chr_mtx);
-		(*win)->xyz_plane = pts_mtx_3d(chr_mtx, (*win)->lines,
-													(*win)->columns);
-		return (1);
 	}
-	else
-		return (0);
+}
+
+void	rot_z(t_win *win)
+{
+	int		i;
+	int		j;
+	double	x;
+	double	y;
+	t_point ***mtx;
+
+	mtx = win->xyz_plane;
+	i = -1;
+	while (++i < win->lines)
+	{
+		j = -1;
+		while (++j < win->columns)
+		{
+			x = (mtx[i][j])->var_x;
+			y = (mtx[i][j])->var_y;
+			(mtx[i][j])->var_x = x * cos(win->rotz) - y * sin(win->rotz);
+			(mtx[i][j])->var_y = x * sin(win->rotz) + y * cos(win->rotz);
+		}
+	}
+}
+
+void	update_pts_vars(t_win *win)
+{
+	int		i;
+	int		j;
+	t_point ***mtx;
+
+	mtx = win->xyz_plane;
+	i = -1;
+	while (++i < win->lines)
+	{
+		j = -1;
+		while (++j < win->columns)
+		{
+			(mtx[i][j])->var_x = (mtx[i][j])->ref_x * win->ax;
+			(mtx[i][j])->var_y = (mtx[i][j])->ref_y * win->ay;
+			(mtx[i][j])->var_z = (mtx[i][j])->ref_z * win->az;
+		}
+	}
+	rot_x(win);
+	rot_y(win);
+	rot_z(win);
 }
 
 int		main(int ac, char **av)

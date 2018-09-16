@@ -19,25 +19,19 @@
 # include <math.h>
 # include <stdio.h>
 
-# define W_WIDTH 2000
-# define W_HEIGHT 1250
+# define W_WIDTH 1250
+# define W_HEIGHT 780
+# define ANG_INCR 0.20944
 
 typedef struct	s_point
 {
-	int	ref_x;
-	int ref_y;
-	int	ref_z;
-	int var_x;
-	int var_y;
-	int var_z;
+	double	ref_x;
+	double	ref_y;
+	double	ref_z;
+	double	var_x;
+	double	var_y;
+	double	var_z;
 }				t_point;
-
-/*
-typedef struct	s_map
-{
-	t_point	***xy_plane;
-}				t_map;
-*/
 
 typedef struct	s_win
 {
@@ -45,14 +39,17 @@ typedef struct	s_win
 	void		*w_p;
 	struct s_w	*next;
 	struct s_w	*prev;
-	int			lines;
-	int			columns;
-	int			keycode;
-	int			ax;
-	int			ay;
-	int			az;
-	int			osx;
-	int			osy;
+	double		lines;
+	double		columns;
+	double		keycode;
+	double		ax;
+	double		ay;
+	double		az;
+	double		osx;
+	double		osy;
+	double		rotx;
+	double		roty;
+	double		rotz;
 	t_point		***xyz_plane;
 }				t_win;
 
@@ -73,5 +70,7 @@ int				key_hook(int keycode, t_win *param);
 void			print_commands(t_win *win);
 void			plot_line(t_win *win, t_point *p0, t_point *p1);
 void			plot_points(t_win *win);
+void			update_pts_vars(t_win *win);
+void			clear_img(t_win *win);
 
 #endif

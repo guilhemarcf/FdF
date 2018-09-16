@@ -36,8 +36,8 @@ t_point		***pts_mtx_3d(char ***chr_mtx, int line_count,
 			if ((pts_mtx[i][j] = (t_point *)malloc(sizeof(***pts_mtx))) == NULL)
 				return (NULL);
 			(pts_mtx[i][j])->ref_z = ft_atoi(chr_mtx[i][j]);
-			(pts_mtx[i][j])->ref_y = i;
-			(pts_mtx[i][j])->ref_x = j;
+			(pts_mtx[i][j])->ref_y = i - line_count / 2;
+			(pts_mtx[i][j])->ref_x = j - nbr_count / 2;
 		}
 	}
 	return (pts_mtx);
@@ -79,6 +79,30 @@ char		***chr_mtx_3d(t_list *lst, int lst_count)
 	return (mtx);
 }
 
+int		acquire_xyz(t_win **win, char *arg)
+{
+	t_list	*lst_store;
+	char	***chr_mtx;
+	int		fd;
+
+	if ((fd = open(arg, O_RDONLY)) > 0 &&
+			(lst_store = read_map_to_lst(fd)) != NULL)
+	{
+		(*win)->lines = count_lst(lst_store);
+		chr_mtx = chr_mtx_3d(lst_store, (*win)->lines);
+		if (lines_are_uniform(chr_mtx) != 1)
+		{
+			error();
+			return (0);
+		}
+		(*win)->columns = count_nbrs(chr_mtx);
+		(*win)->xyz_plane = pts_mtx_3d(chr_mtx, (*win)->lines,
+													(*win)->columns);
+		return (1);
+	}
+	else
+		return (0);
+}
 
 
 
