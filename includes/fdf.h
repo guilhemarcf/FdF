@@ -71,6 +71,7 @@ typedef struct	s_win
 	double		z_max;
 	double		z_min;
 	double		z_ave;
+	double		color_incr;
 	int			perspective;
 	t_point		***xyz_plane;
 }				t_win;
@@ -134,8 +135,20 @@ int				lines_are_uniform(char ***mtx);
 */
 
 void			error(void);
-void			plot_line(t_win *win, t_point *p0, t_point *p1);
 void			plot_points(t_win *win);
 void			print_commands(t_win *win);
+
+/*
+** Functions of the colors.c file
+*/
+
+void			set_color_incr(t_win *win);
+int				set_color(t_win *win, double z);
+
+/*
+** Functions of the plot_line.c file
+*/
+
+void			plot_line(t_win *win, t_point *p0, t_point *p1);
 
 #endif

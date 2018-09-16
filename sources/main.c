@@ -40,11 +40,10 @@ void	update_pts_vars(t_win *win)
 	rot_x(win);
 	rot_y(win);
 	rot_z(win);
+	get_perspective(win);
+	set_color_incr(win);
 	if (win->perspective == 1)
-	{
-		get_perspective(win);
 		apply_fake_perspective(win);
-	}
 }
 
 /*

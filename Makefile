@@ -28,7 +28,9 @@ SRC_NAME = main.c\
 			checks.c\
 			keys.c\
 			ext_keys.c\
-			matrix.c
+			matrix.c\
+			colors.c\
+			plot_line.c
 
 INC_NAME = fdf.h
 

@@ -13,38 +13,26 @@
 #include "./../includes/fdf.h"
 
 /*
-** This function plots lines using the DDA algorithm. I compressed all the
-** variables I needed into two arrays to make it fit the norm and
-** still do it in one function. ctrls[0] = dx, ctrls[1] = dy,
-** ctrls[2] = steps, ctrls[3] = i, coords[0] = x_incr, coords[1] = y_incr,
-** ctrls[2] = x0, ctrls[3] = x1, ctrls[4] = y0, ctrls[5] = y1.
+** This function is there to make sure the line printing algorithm and the
+** color setter work together to give the ilusion of deepness. This function
+** call makes sure the first point has an equal or lower var_z than the second.
 */
 
-void	plot_line(t_win *win, t_point *p0, t_point *p1)
+void	plot_growing_point(t_win *win, t_point ***mtx, int i, int j)
 {
-	int 	ctrls[4];
-	double	coords[6];
-
-
-	coords[2] = (double)p0->var_x;
-	coords[3] = (double)p1->var_x;
-	coords[4] = (double)p0->var_y;
-	coords[5] = (double)p1->var_y;
-	ctrls[0] = coords[3] - coords[2];
-	ctrls[1] = coords[5] - coords[4];
-	if (abs(ctrls[0]) > abs(ctrls[1]))
-		ctrls[2] = abs(ctrls[0]);
-	else
-		ctrls[2] = abs(ctrls[1]);
-	coords[0] = (double) ctrls[0] / (double) ctrls[2];
-	coords[1] = (double) ctrls[1] / (double) ctrls[2];
-	ctrls[3] = -1;
-	while (++ctrls[3] < ctrls[2])
+	if (j + 1 < win->columns)
 	{
-		coords[2] = coords[2] + coords[0];
-		coords[4] = coords[4] + coords[1];
-		mlx_pixel_put(win->m_p, win->w_p, round(coords[2]) + win->osx,
-								round(coords[4]) + win->osy, 0xFFFFFF);
+		if ((mtx[i][j])->var_z < (mtx[i][j + 1])->var_z)
+			plot_line(win, mtx[i][j], mtx[i][j + 1]);
+		else
+			plot_line(win, mtx[i][j + 1], mtx[i][j]);
+	}
+	if (i + 1 < win->lines)
+	{
+		if ((mtx[i][j])->var_z < (mtx[i + 1][j])->var_z)
+			plot_line(win, mtx[i][j], mtx[i + 1][j]);
+		else
+			plot_line(win, mtx[i + 1][j], mtx[i][j]);
 	}
 }
 
@@ -70,12 +58,7 @@ void	plot_points(t_win *win)
 	{
 		j = -1;
 		while (++j < win->columns)
-		{
-			if (j + 1 < win->columns)
-				plot_line(win, mtx[i][j], mtx[i][j + 1]);
-			if (i + 1 < win->lines)
-				plot_line(win, mtx[i][j], mtx[i + 1][j]);
-		}
+			plot_growing_point(win, mtx, i, j);
 	}
 }
 
@@ -116,6 +99,6 @@ void	print_commands(t_win *win)
 
 void	error(void)
 {
-	ft_putendl("something went wrong with the rendering.");
+	ft_putendl("something was wrong with the input.");
 	exit(0);
 }
