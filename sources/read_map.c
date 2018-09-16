@@ -15,7 +15,7 @@
 
 
 t_point		***pts_mtx_3d(char ***chr_mtx, int line_count,
-													int nbr_count, int a)
+													int nbr_count)
 {
 	int		i;
 	int		j;
@@ -35,9 +35,9 @@ t_point		***pts_mtx_3d(char ***chr_mtx, int line_count,
 		{
 			if ((pts_mtx[i][j] = (t_point *)malloc(sizeof(***pts_mtx))) == NULL)
 				return (NULL);
-			(pts_mtx[i][j])->z = ft_atoi(chr_mtx[i][j]) * a;
-			(pts_mtx[i][j])->y = i * a;
-			(pts_mtx[i][j])->x = j * a;
+			(pts_mtx[i][j])->ref_z = ft_atoi(chr_mtx[i][j]);
+			(pts_mtx[i][j])->ref_y = i;
+			(pts_mtx[i][j])->ref_x = j;
 		}
 	}
 	return (pts_mtx);

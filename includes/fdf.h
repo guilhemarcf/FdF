@@ -24,9 +24,12 @@
 
 typedef struct	s_point
 {
-	int	x;
-	int	y;
-	int	z;
+	int	ref_x;
+	int ref_y;
+	int	ref_z;
+	int var_x;
+	int var_y;
+	int var_z;
 }				t_point;
 
 /*
@@ -45,14 +48,17 @@ typedef struct	s_win
 	int			lines;
 	int			columns;
 	int			keycode;
-	int			a;
+	int			ax;
+	int			ay;
+	int			az;
+	int			osx;
+	int			osy;
 	t_point		***xyz_plane;
 }				t_win;
 
 t_list			*read_map_to_lst(int fd);
 char			***chr_mtx_3d(t_list *lst, int lst_count);
-t_point			***pts_mtx_3d(char ***chr_mtx, int line_count,
-													int nbr_count, int a);
+t_point			***pts_mtx_3d(char ***chr_mtx, int line_count, int nbr_count);
 int				lines_are_uniform(char ***mtx);
 void			print_3da_chr(char ***s);
 void			print_3da_pts(t_point ***s, int line, int nbr);

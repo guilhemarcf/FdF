@@ -23,14 +23,19 @@ t_win	*init_window(char *arg)
 
 	if ((win = (t_win *)malloc(sizeof(t_win))) == NULL)
 		return (NULL);
+	
 	win->m_p = mlx_init();
 	win->w_p = mlx_new_window(win->m_p, W_WIDTH, W_HEIGHT,
 										"fdf 42 - gcaixeta");
-	win->a = 50;
 	if (acquire_xyz(&win, arg) != 1)
 		return (NULL);
 	win->next = NULL;
 	win->prev = NULL;
+	win->a = 50;
+	win->osx = 250;
+	win->osy = 450;
+	print_commands(win);
+	plot_points(win);
 	mlx_key_hook(win->w_p, key_hook, win);
 	mlx_loop(win->m_p);
 	return (win);
@@ -64,7 +69,7 @@ int		acquire_xyz(t_win **win, char *arg)
 		}
 		(*win)->columns = count_nbrs(chr_mtx);
 		(*win)->xyz_plane = pts_mtx_3d(chr_mtx, (*win)->lines,
-										(*win)->columns, (*win)->a);
+													(*win)->columns);
 		return (1);
 	}
 	else

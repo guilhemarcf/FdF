@@ -43,7 +43,7 @@ void	print_3da_pts(t_point ***s, int line, int nbr)
 		j = 0;
 		while (j < nbr)
 		{
-			ft_putnbr((s[i][j])->z);
+			ft_putnbr((s[i][j])->var_z);
 			ft_putchar(' ');
 			j++;
 		}
@@ -67,18 +67,28 @@ void	print_commands(t_win *win)
 	mlx_string_put(win->m_p, win->w_p, 150, 160, 0xFFFFFF,
 					"press \"SPACE\" to clear");
 	mlx_string_put(win->m_p, win->w_p, 150, 180, 0xFFFFFF,
-					"press \"E\" to plot lines");
-	mlx_string_put(win->m_p, win->w_p, 150, 280, 0xFFFFFF,
-					"param \'a\' = %d");
+					"press \"D\" to plot lines");
 }
 
-/*
-** This function plots lines using the DDA algorithm. I compressed all the
-** variables I needed into two arrays to make it fit the norm and
-** still do it in one function. ctrls[0] = dx, ctrls[1] = dy,
-** ctrls[2] = steps, ctrls[3] = i, coords[0] = x_incr, coords[1] = y_incr,
-** ctrls[2] = x0, ctrls[3] = x1, ctrls[4] = y0, ctrls[5] = y1.
-*/
+void	update_pts_vars(t_win *win)
+{
+	int		i;
+	int		j;
+	t_point ***mtx;
+
+	mtx = win->xyz_plane;
+	i = -1;
+	while (++i  < win->lines)
+	{
+		j = -1;
+		while (++j < win->columns)
+		{
+			mtx[i][j]->var_x = mtx[i][j]->ref_x * win->a;
+			mtx[i][j]->var_y = mtx[i][j]->ref_y * win->a;
+			mtx[i][j]->var_z = mtx[i][j]->ref_z * win->a;
+		}
+	}
+}
 
 void	plot_points(t_win *win)
 {
@@ -86,6 +96,7 @@ void	plot_points(t_win *win)
 	int		j;
 	t_point	***mtx;
 
+	update_pts_vars(win);
 	mtx = win->xyz_plane;
 	i = -1;
 	while (++i < win->lines)
@@ -101,6 +112,13 @@ void	plot_points(t_win *win)
 	}
 }
 
+/*
+** This function plots lines using the DDA algorithm. I compressed all the
+** variables I needed into two arrays to make it fit the norm and
+** still do it in one function. ctrls[0] = dx, ctrls[1] = dy,
+** ctrls[2] = steps, ctrls[3] = i, coords[0] = x_incr, coords[1] = y_incr,
+** ctrls[2] = x0, ctrls[3] = x1, ctrls[4] = y0, ctrls[5] = y1.
+*/
 //---------------------------------------------------ADAPT THIS//
 void	plot_line(t_win *win, t_point *p0, t_point *p1)
 {
@@ -108,10 +126,10 @@ void	plot_line(t_win *win, t_point *p0, t_point *p1)
 	float	coords[6];
 
 
-	coords[2] = (float)p0->x;
-	coords[3] = (float)p1->x;
-	coords[4] = (float)p0->y;
-	coords[5] = (float)p1->y;
+	coords[2] = (float)p0->var_x;
+	coords[3] = (float)p1->var_x;
+	coords[4] = (float)p0->var_y;
+	coords[5] = (float)p1->var_y;
 	ctrls[0] = coords[3] - coords[2];
 	ctrls[1] = coords[5] - coords[4];
 	if (abs(ctrls[0]) > abs(ctrls[1]))
@@ -125,8 +143,8 @@ void	plot_line(t_win *win, t_point *p0, t_point *p1)
 	{
 		coords[2] = coords[2] + coords[0];
 		coords[4] = coords[4] + coords[1];
-		mlx_pixel_put(win->m_p, win->w_p,
-						round(coords[2]),round(coords[4]), 0xFFFFFF);
+		mlx_pixel_put(win->m_p, win->w_p, round(coords[2]) + win->osx,
+								round(coords[4]) + win->osy, 0xFFFFFF);
 	}
 }
 //----------------------------------------------------SIHT TPADA
