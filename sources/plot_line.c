@@ -11,18 +11,46 @@
 /* ************************************************************************** */
 
 #include "./../includes/fdf.h"
+
 /*
+** Part of the plot_line function that assigns the variables and do a little
+** math so the function can plot the dots.
+*/
+
 void	plot_line_assigns(t_point *p0, t_point *p1, double *coords,
 															int *ctrls)
 {
-
+	coords[0] = (double)p0->var_x;
+	coords[1] = (double)p1->var_x;
+	coords[2] = (double)p0->var_y;
+	coords[3] = (double)p1->var_y;
+	coords[4] = (double)p0->var_z;
+	coords[5] = (double)p1->var_z;
+	ctrls[0] = coords[1] - coords[0];
+	ctrls[1] = coords[3] - coords[2];
+	ctrls[2] = coords[5] - coords[4];
+	if (abs(ctrls[0]) > abs(ctrls[1]))
+		ctrls[3] = abs(ctrls[0]);
+	else
+		ctrls[3] = abs(ctrls[1]);
+	coords[6] = (double)ctrls[0] / (double)ctrls[3];
+	coords[7] = (double)ctrls[1] / (double)ctrls[3];
+	coords[8] = (double)ctrls[2] / (double)ctrls[3];
 }
+
+/*
+** Part of the plot_line function that actually prints the pixel
+*/
 
 void	plot_line_action(double *coords, int ctrls, t_win *win)
 {
-
+	coords[0] = coords[0] + coords[6];
+	coords[2] = coords[2] + coords[7];
+	coords[4] = coords[4] + coords[8];
+	mlx_pixel_put(win->m_p, win->w_p, round(coords[0]) + win->osx,
+					round(coords[2]) + win->osy, set_color(win, coords[4]));
 }
-*/
+
 /*
 ** This line drawin function plots dots according to the DDA method, and
 ** gives the color of each individual pixel based on the z param and color
@@ -50,31 +78,9 @@ void	plot_line(t_win *win, t_point *p0, t_point *p1)
 	int		ctrls[5];
 	double	coords[9];
 
-	coords[0] = (double)p0->var_x;//coords[0]
-	coords[1] = (double)p1->var_x;//coords[1]
-	coords[2] = (double)p0->var_y;//coords[2]
-	coords[3] = (double)p1->var_y;//coords[3]
-	coords[4] = (double)p0->var_z;//coords[4]
-	coords[5] = (double)p1->var_z;//coords[5]
-	ctrls[0] = coords[1] - coords[0];//ctrls[0]
-	ctrls[1] = coords[3] - coords[2];//ctrls[1]
-	ctrls[2] = coords[5] - coords[4];//ctrls[2]
-	if (abs(ctrls[0]) > abs(ctrls[1]))
-		ctrls[3] = abs(ctrls[0]);//ctrls[3]
-	else
-		ctrls[3] = abs(ctrls[1]);
-	coords[6] = (double)ctrls[0] / (double)ctrls[3];//coords[6]
-	coords[7] = (double)ctrls[1] / (double)ctrls[3];//coords[7]
-	coords[8] = (double)ctrls[2] / (double)ctrls[3];//coords[8]
-	//plot_line_assigns(p0, p1, coords, ctrls);
-	ctrls[4] = -1;//ctrls[4]
+	
+	plot_line_assigns(p0, p1, coords, ctrls);
+	ctrls[4] = -1;
 	while (++ctrls[4] < ctrls[3])
-	{
-		coords[0] = coords[0] + coords[6];//coords[0]
-		coords[2] = coords[2] + coords[7];//coords[2]
-		coords[4] = coords[4] + coords[8];//coords[4]
-		mlx_pixel_put(win->m_p, win->w_p, round(coords[0]) + win->osx,
-					round(coords[2]) + win->osy, set_color(win, coords[4]));
-		//plot_line_action(coords, ctrls, win);
-	}
+		plot_line_action(coords, ctrls, win);
 }
