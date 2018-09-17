@@ -25,6 +25,8 @@ void	clear_img(t_win *win)
 	win->ax = 20;
 	win->ay = 20;
 	win->az = 10;
+	win->color_pal = 0;
+	win->color_incr = 0;
 	win->osx = W_WIDTH / 2;
 	win->osy = W_HEIGHT / 2;
 	win->rotx = 3 * ANG_INCR;
@@ -48,6 +50,8 @@ void	act_on_key(t_win *win)
 		clear_img(win);
 	else if (win->keycode == 35)
 		chng_persp(win);
+	else if (win->keycode == 8 || win->keycode == 9)
+		chng_color(win);
 	else if (win->keycode >= 4 && win->keycode <= 5)
 		chng_ang_all(win);
 	else if (win->keycode >= 12 && win->keycode <= 17)

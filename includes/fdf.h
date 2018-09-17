@@ -72,6 +72,7 @@ typedef struct	s_win
 	double		z_min;
 	double		z_ave;
 	double		color_incr;
+	int			color_pal;
 	int			perspective;
 	t_point		***xyz_plane;
 }				t_win;
@@ -144,11 +145,15 @@ void			print_commands(t_win *win);
 
 void			set_color_incr(t_win *win);
 int				set_color(t_win *win, double z);
+void			chng_color(t_win *win);
 
 /*
 ** Functions of the plot_line.c file
 */
 
 void			plot_line(t_win *win, t_point *p0, t_point *p1);
+void			plot_line_action(double *coords, int ctrls, t_win *win);
+void			plot_line_assigns(t_point *p0, t_point *p1, double *coords,
+																int *ctrls);
 
 #endif

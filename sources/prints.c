@@ -88,6 +88,8 @@ void	print_commands(t_win *win)
 					"\"5\" and \"2\" (NUMPAD) to rotate on y");
 	mlx_string_put(win->m_p, win->w_p, W_WIDTH / 15, W_HEIGHT / 15 + 180, 0xFFFFFF,
 					"\"6\" and \"3\" (NUMPAD) to rotate on z");
+	mlx_string_put(win->m_p, win->w_p, W_WIDTH / 15, W_HEIGHT / 15 + 200, 0xFFFFFF,
+					"\"C\" and \"V\" to change colors");
 }
 
 /*
