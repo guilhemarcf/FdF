@@ -63,9 +63,9 @@ void	apply_fake_perspective(t_win *win)
 		while (++j < win->columns)
 		{
 			mtx[i][j]->var_x = mtx[i][j]->var_x *
-								((mtx[i][j]->var_z + 200) / (win->z_ave + 200));
+								((mtx[i][j]->var_z + 300) / (win->z_ave + 300));
 			mtx[i][j]->var_y = mtx[i][j]->var_y *
-								((mtx[i][j]->var_z + 200) / (win->z_ave + 200));
+								((mtx[i][j]->var_z + 300) / (win->z_ave + 300));
 		}
 	}
 }

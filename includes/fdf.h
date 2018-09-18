@@ -152,7 +152,7 @@ void			chng_color(t_win *win);
 */
 
 void			plot_line(t_win *win, t_point *p0, t_point *p1);
-void			plot_line_action(double *coords, int ctrls, t_win *win);
+void			plot_line_action(double *coords, t_win *win);
 void			plot_line_assigns(t_point *p0, t_point *p1, double *coords,
 																int *ctrls);
 

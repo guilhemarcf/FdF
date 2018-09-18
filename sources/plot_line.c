@@ -42,7 +42,7 @@ void	plot_line_assigns(t_point *p0, t_point *p1, double *coords,
 ** Part of the plot_line function that actually prints the pixel
 */
 
-void	plot_line_action(double *coords, int ctrls, t_win *win)
+void	plot_line_action(double *coords, t_win *win)
 {
 	coords[0] = coords[0] + coords[6];
 	coords[2] = coords[2] + coords[7];
@@ -82,5 +82,5 @@ void	plot_line(t_win *win, t_point *p0, t_point *p1)
 	plot_line_assigns(p0, p1, coords, ctrls);
 	ctrls[4] = -1;
 	while (++ctrls[4] < ctrls[3])
-		plot_line_action(coords, ctrls, win);
+		plot_line_action(coords, win);
 }
