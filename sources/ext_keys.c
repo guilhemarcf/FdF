@@ -23,7 +23,7 @@ void	chng_ang_all(t_win *win)
 	{
 		win->ax = win->ax * 1.05;
 		win->ay = win->ay * 1.05;
-		win->az = win->az * 1.05;	
+		win->az = win->az * 1.05;
 	}
 	else if (win->keycode == 5)
 	{

@@ -18,11 +18,11 @@
 # include <stdlib.h>
 # include <fcntl.h>
 
-# define BUFF_SIZE 32
-# define MAX_FD 256
+# define BUFF_SIZE 4096
+# define MAX_FD 64000
 
-# define AUX_BUFFER_SIZE 512
-# define MAIN_BUFFER_SIZE 4096
+# define AUX_BUFFER_SIZE 4096
+# define MAIN_BUFFER_SIZE 64000
 
 typedef struct	s_list
 {
@@ -108,7 +108,7 @@ t_list			*ft_lstrev(t_list **lst);
 char			*ft_strrev(char *str);
 char			*ft_acqinput(int fd);
 char			*ft_incr_n_trans(char *str, int *size);
-void			ft_free_all(char **s, int i);
+char			**ft_free_all(char **s, int i);
 t_mtx_lst		*ft_get_mtx_lst(int mtx_index, t_mtx_lst *mlst);
 int				ft_mtx_count(t_mtx_lst *mlst);
 void			ft_mtx_add(t_mtx_lst **amlst, t_mtx_lst *new);
@@ -118,6 +118,8 @@ void			ft_mtx_iter(t_mtx_lst *mlst, void (*f)(t_mtx_lst *elem));
 void			ft_mtx_print(t_mtx_lst *mlst);
 void			ft_print_tab(char **s);
 int				get_next_line(const int fd, char **line);
-t_list			*ft_lstnew2(char *s);
+
+t_list			*ft_lstnew2(char *content);
+void			ft_lstdel2(t_list **alst);
 
 #endif

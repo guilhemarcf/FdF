@@ -1,39 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstnew2.c                                       :+:      :+:    :+:   */
+/*   ft_lstdel2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gcaixeta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/09/14 00:11:42 by gcaixeta          #+#    #+#             */
-/*   Updated: 2018/09/14 00:11:51 by gcaixeta         ###   ########.fr       */
+/*   Created: 2018/09/18 14:02:08 by gcaixeta          #+#    #+#             */
+/*   Updated: 2018/09/18 14:02:41 by gcaixeta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-t_list	*ft_lstnew2(char *content)
+void	ft_lstdel2(t_list **alst)
 {
-	t_list	*r;
+	t_list **flwr;
+	t_list *aux;
 
-	r = (t_list *)malloc(sizeof(*r));
-	if (r == NULL)
-		return (NULL);
-	if (content == NULL)
+	flwr = alst;
+	aux = *alst;
+	while (*flwr != NULL)
 	{
-		r->content = NULL;
-		r->content_size = 0;
+		free((*flwr)->content);
+		aux = (*flwr)->next;
+		free(*flwr);
+		*flwr = aux;
 	}
-	else
-	{
-		r->content = ft_strdup(content);
-		if (r->content == NULL)
-		{
-			free(r);
-			return (NULL);
-		}
-		r->content_size = ft_strlen(content) + 1;
-	}
-	r->next = NULL;
-	return (r);
+	if (flwr != NULL)
+		free(*flwr);
+	*alst = NULL;
 }

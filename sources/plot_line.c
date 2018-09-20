@@ -78,7 +78,6 @@ void	plot_line(t_win *win, t_point *p0, t_point *p1)
 	int		ctrls[5];
 	double	coords[9];
 
-	
 	plot_line_assigns(p0, p1, coords, ctrls);
 	ctrls[4] = -1;
 	while (++ctrls[4] < ctrls[3])

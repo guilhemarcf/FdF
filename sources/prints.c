@@ -68,27 +68,27 @@ void	plot_points(t_win *win)
 
 void	print_commands(t_win *win)
 {
-	mlx_string_put(win->m_p, win->w_p, W_WIDTH / 15, W_HEIGHT / 15, 0xFFFFFF,
+	mlx_string_put(win->m_p, win->w_p, W_W / 15, W_H / 15, 0xFFFFFF,
 					"\"ESC\" to exit");
-	mlx_string_put(win->m_p, win->w_p, W_WIDTH / 15, W_HEIGHT / 15 + 20, 0xFFFFFF,
+	mlx_string_put(win->m_p, win->w_p, W_W / 15, W_H / 15 + 20, 0xFFFFFF,
 					"\"P\" to change projection");
-	mlx_string_put(win->m_p, win->w_p, W_WIDTH / 15, W_HEIGHT / 15 + 40, 0xFFFFFF,
+	mlx_string_put(win->m_p, win->w_p, W_W / 15, W_H / 15 + 40, 0xFFFFFF,
 					"\"Q\" and \"R\" to change x axis");
-	mlx_string_put(win->m_p, win->w_p, W_WIDTH / 15, W_HEIGHT / 15 + 60, 0xFFFFFF,
+	mlx_string_put(win->m_p, win->w_p, W_W / 15, W_H / 15 + 60, 0xFFFFFF,
 					"\"W\" and \"T\" to change y axis");
-	mlx_string_put(win->m_p, win->w_p, W_WIDTH / 15, W_HEIGHT / 15 + 80, 0xFFFFFF,
+	mlx_string_put(win->m_p, win->w_p, W_W / 15, W_H / 15 + 80, 0xFFFFFF,
 					"\"E\" and \"Y\" to change z axis");
-	mlx_string_put(win->m_p, win->w_p, W_WIDTH / 15, W_HEIGHT / 15 + 100, 0xFFFFFF,
+	mlx_string_put(win->m_p, win->w_p, W_W / 15, W_H / 15 + 100, 0xFFFFFF,
 					"\"G\" and \"H\" to change zoom");
-	mlx_string_put(win->m_p, win->w_p, W_WIDTH / 15, W_HEIGHT / 15 + 120, 0xFFFFFF,
+	mlx_string_put(win->m_p, win->w_p, W_W / 15, W_H / 15 + 120, 0xFFFFFF,
 					"\"SPACE\" to change reset");
-	mlx_string_put(win->m_p, win->w_p, W_WIDTH / 15, W_HEIGHT / 15 + 140, 0xFFFFFF,
+	mlx_string_put(win->m_p, win->w_p, W_W / 15, W_H / 15 + 140, 0xFFFFFF,
 					"\"4\" and \"1\" (NUMPAD) to rotate on x");
-	mlx_string_put(win->m_p, win->w_p, W_WIDTH / 15, W_HEIGHT / 15 + 160, 0xFFFFFF,
+	mlx_string_put(win->m_p, win->w_p, W_W / 15, W_H / 15 + 160, 0xFFFFFF,
 					"\"5\" and \"2\" (NUMPAD) to rotate on y");
-	mlx_string_put(win->m_p, win->w_p, W_WIDTH / 15, W_HEIGHT / 15 + 180, 0xFFFFFF,
+	mlx_string_put(win->m_p, win->w_p, W_W / 15, W_H / 15 + 180, 0xFFFFFF,
 					"\"6\" and \"3\" (NUMPAD) to rotate on z");
-	mlx_string_put(win->m_p, win->w_p, W_WIDTH / 15, W_HEIGHT / 15 + 200, 0xFFFFFF,
+	mlx_string_put(win->m_p, win->w_p, W_W / 15, W_H / 15 + 200, 0xFFFFFF,
 					"\"C\" and \"V\" to change colors");
 }
 

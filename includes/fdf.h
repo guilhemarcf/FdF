@@ -27,8 +27,8 @@
 ** I avoided too many macros, and I was able to use just these 3.
 */
 
-# define W_WIDTH 1250
-# define W_HEIGHT 780
+# define W_W 1250
+# define W_H 780
 # define ANG_INCR 0.20944
 
 /*
@@ -84,6 +84,7 @@ typedef struct	s_win
 int				main(int ac, char **av);
 t_win			*init_window(char *arg);
 void			update_pts_vars(t_win *win);
+void			free_mtx_pts(t_point ***pts_mtx, double lines, double columns);
 
 /*
 ** Functions of the keys.c file
@@ -117,19 +118,18 @@ void			apply_fake_perspective(t_win *win);
 ** Functions of the read_map.c file
 */
 
-t_list			*read_map_to_lst(int fd);
+t_list			*read_map_to_lst(int fd, t_win *win);
 char			***chr_mtx_3d(t_list *lst, int lst_count);
 t_point			***pts_mtx_3d(char ***chr_mtx, int line_count,
 													int nbr_count);
 int				acquire_xyz(t_win **win, char *arg);
+void			free_mtx_chr(char ****chr_mtx, double lines, double columns);
 
 /*
 ** Functions of the checks.c file
 */
 
-int				count_lst(t_list *lst);
-int				count_nbrs(char ***mtx);
-int				lines_are_uniform(char ***mtx);
+int				lines_are_uniform(char ***mtx, t_win *win);
 
 /*
 ** Functions of the prints.c file
@@ -155,5 +155,4 @@ void			plot_line(t_win *win, t_point *p0, t_point *p1);
 void			plot_line_action(double *coords, t_win *win);
 void			plot_line_assigns(t_point *p0, t_point *p1, double *coords,
 																int *ctrls);
-
 #endif

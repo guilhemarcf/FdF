@@ -27,8 +27,8 @@ void	clear_img(t_win *win)
 	win->az = 10;
 	win->color_pal = 0;
 	win->color_incr = 0;
-	win->osx = W_WIDTH / 2;
-	win->osy = W_HEIGHT / 2;
+	win->osx = W_W / 2;
+	win->osy = W_H / 2;
 	win->rotx = 3 * ANG_INCR;
 	win->roty = ANG_INCR;
 	win->rotz = -ANG_INCR;
@@ -45,7 +45,7 @@ void	act_on_key(t_win *win)
 	ft_putnbr(win->keycode);
 	ft_putchar(' ');
 	if (win->keycode == 53)
-		exit (0);
+		exit(0);
 	else if (win->keycode == 49)
 		clear_img(win);
 	else if (win->keycode == 35)

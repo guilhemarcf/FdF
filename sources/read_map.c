@@ -13,6 +13,28 @@
 #include "./../includes/fdf.h"
 
 /*
+** This function frees the matrix of characters once it's already use to
+** transfer the data to the matrix of 3d points.
+*/
+
+void		free_mtx_chr(char ****chr_mtx, double lines, double columns)
+{
+	int		i;
+	int		j;
+
+	i = -1;
+	while (++i < lines)
+	{
+		j = -1;
+		while (++j < columns)
+			free((*chr_mtx)[i][j]);
+		free((*chr_mtx)[i]);
+	}
+	free(*chr_mtx);
+	*chr_mtx = NULL;
+}
+
+/*
 ** Eight function called by acquire_xyz, actually sets the struct of the points
 ** with the values that it should have. It allocates all the necessary space
 ** in memory, and assigns it in a way that helps keeping the geometry
@@ -66,8 +88,8 @@ char		***chr_mtx_3d(t_list *lst, int lst_count)
 	while (i < lst_count)
 	{
 		mtx[i] = ft_strsplit(lst->content, ' ');
-		i++;
 		lst = lst->next;
+		i++;
 	}
 	mtx[i] = NULL;
 	return (mtx);
@@ -81,20 +103,24 @@ char		***chr_mtx_3d(t_list *lst, int lst_count)
 ** the whole list everytime I need to add a new node.
 */
 
-t_list		*read_map_to_lst(int fd)
+t_list		*read_map_to_lst(int fd, t_win *win)
 {
 	char		*nbr_line;
 	t_list		*lst_store;
 	int			qlines;
+	int			read;
 
 	qlines = 0;
 	lst_store = NULL;
-	while (get_next_line(fd, &nbr_line) > 0)
+	while ((read = get_next_line(fd, &nbr_line)) > 0)
 	{
 		ft_lstadd(&lst_store, ft_lstnew2(nbr_line));
-		qlines++;
 		ft_strdel(&nbr_line);
+		qlines++;
 	}
+	if (read < 0)
+		error();
+	win->lines = qlines;
 	lst_store = ft_lstrev(&lst_store);
 	return (lst_store);
 }
@@ -111,36 +137,25 @@ t_list		*read_map_to_lst(int fd)
 ** to ensure the program can do a lot using just the window struct.
 */
 
-int		acquire_xyz(t_win **win, char *arg)
+int			acquire_xyz(t_win **win, char *arg)
 {
 	t_list	*lst_store;
 	char	***chr_mtx;
 	int		fd;
 
 	if ((fd = open(arg, O_RDONLY)) > 0 &&
-			(lst_store = read_map_to_lst(fd)) != NULL)
+			(lst_store = read_map_to_lst(fd, *win)) != NULL)
 	{
-		(*win)->lines = count_lst(lst_store);
 		chr_mtx = chr_mtx_3d(lst_store, (*win)->lines);
-		if (lines_are_uniform(chr_mtx) != 1)
+		ft_lstdel2(&lst_store);
+		if (lines_are_uniform(chr_mtx, *win) != 1)
 			error();
-		(*win)->columns = count_nbrs(chr_mtx);
 		(*win)->xyz_plane = pts_mtx_3d(chr_mtx, (*win)->lines,
 													(*win)->columns);
+		free_mtx_chr(&chr_mtx, (*win)->lines, (*win)->columns);
+		close(fd);
 		return (1);
 	}
 	else
 		return (0);
 }
-
-
-
-
-
-
-
-
-
-
-
-

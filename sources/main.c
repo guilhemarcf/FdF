@@ -13,6 +13,28 @@
 #include "./../includes/fdf.h"
 
 /*
+** This function is used to free the matrix of 3d points after it's used.
+** It only exists because one could choose edit the code to have multiple
+** readings of maps sequencially. It's not really necessary.
+*/
+
+void	free_mtx_pts(t_point ***pts_mtx, double lines, double columns)
+{
+	int		i;
+	int		j;
+
+	i = -1;
+	while (++i < lines)
+	{
+		j = -1;
+		while (++j < columns)
+			free(pts_mtx[i][j]);
+		free(pts_mtx[i]);
+	}
+	free(pts_mtx);
+}
+
+/*
 ** The update function called by plot_points makes the matrix of points ready
 ** printing by applying all the necessary parameters for the rendering.
 ** it first applies the scale to the points, and then the rotations, and if
@@ -61,7 +83,7 @@ t_win	*init_window(char *arg)
 	if ((win = (t_win *)malloc(sizeof(t_win))) == NULL)
 		return (NULL);
 	win->m_p = mlx_init();
-	win->w_p = mlx_new_window(win->m_p, W_WIDTH, W_HEIGHT,
+	win->w_p = mlx_new_window(win->m_p, W_W, W_H,
 										"fdf 42 - gcaixeta");
 	clear_img(win);
 	if (acquire_xyz(&win, arg) != 1)
@@ -81,26 +103,13 @@ t_win	*init_window(char *arg)
 int		main(int ac, char **av)
 {
 	t_win	*win;
-	
+
 	if (ac == 2)
-		win = init_window(av[1]);
+	{
+		if ((win = init_window(av[1])) == NULL)
+			error();
+		free_mtx_pts(win->xyz_plane, win->lines, win->columns);
+		free(win);
+	}
 	return (0);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

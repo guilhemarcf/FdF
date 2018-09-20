@@ -14,7 +14,7 @@ NAME = fdf
 
 CC = gcc
 
-FLAGS = -Wall -Werror -Wextra -g
+FLAGS = -Wall -Werror -Wextra -g #-Ofast
 
 SRC_PATH = ./sources/
 INC_PATH = ./includes/
