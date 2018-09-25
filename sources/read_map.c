@@ -87,7 +87,8 @@ char		***chr_mtx_3d(t_list *lst, int lst_count)
 	i = 0;
 	while (i < lst_count)
 	{
-		mtx[i] = ft_strsplit(lst->content, ' ');
+		if ((mtx[i] = ft_strsplit(lst->content, ' ')) == NULL)
+			return (NULL);
 		lst = lst->next;
 		i++;
 	}
@@ -143,19 +144,18 @@ int			acquire_xyz(t_win **win, char *arg)
 	char	***chr_mtx;
 	int		fd;
 
-	if ((fd = open(arg, O_RDONLY)) > 0 &&
-			(lst_store = read_map_to_lst(fd, *win)) != NULL)
-	{
-		chr_mtx = chr_mtx_3d(lst_store, (*win)->lines);
-		ft_lstdel2(&lst_store);
-		if (lines_are_uniform(chr_mtx, *win) != 1)
-			error();
-		(*win)->xyz_plane = pts_mtx_3d(chr_mtx, (*win)->lines,
-													(*win)->columns);
-		free_mtx_chr(&chr_mtx, (*win)->lines, (*win)->columns);
-		close(fd);
-		return (1);
-	}
-	else
+	if ((fd = open(arg, O_RDONLY)) <= 0 ||
+						(lst_store = read_map_to_lst(fd, *win)) == NULL)
 		return (0);
+	if ((chr_mtx = chr_mtx_3d(lst_store, (*win)->lines)) == NULL)
+		return (0);
+	ft_lstdel2(&lst_store);
+	if (lines_are_uniform(chr_mtx, *win) != 1)
+		error();
+	if (((*win)->xyz_plane = pts_mtx_3d(chr_mtx, (*win)->lines,
+												(*win)->columns)) == NULL)
+		return (0);
+	free_mtx_chr(&chr_mtx, (*win)->lines, (*win)->columns);
+	close(fd);
+	return (1);
 }

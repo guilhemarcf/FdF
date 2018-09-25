@@ -42,8 +42,6 @@ void	clear_img(t_win *win)
 
 void	act_on_key(t_win *win)
 {
-	ft_putnbr(win->keycode);
-	ft_putchar(' ');
 	if (win->keycode == 53)
 		exit(0);
 	else if (win->keycode == 49)

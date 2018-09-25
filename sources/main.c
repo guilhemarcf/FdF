@@ -105,11 +105,7 @@ int		main(int ac, char **av)
 	t_win	*win;
 
 	if (ac == 2)
-	{
 		if ((win = init_window(av[1])) == NULL)
 			error();
-		free_mtx_pts(win->xyz_plane, win->lines, win->columns);
-		free(win);
-	}
 	return (0);
 }

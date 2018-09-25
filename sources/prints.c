@@ -101,6 +101,6 @@ void	print_commands(t_win *win)
 
 void	error(void)
 {
-	ft_putendl("something was wrong with the input.");
+	ft_putendl("Sorry, something went wrong, but don't be sad, just smile!");
 	exit(0);
 }
